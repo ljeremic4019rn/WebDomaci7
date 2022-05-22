@@ -21,7 +21,6 @@ public class PostResource {
     @Produces(MediaType.APPLICATION_JSON)
 
     public Response all() {
-        System.out.println("KURACCCCCC");
         return Response.ok(this.postService.allPosts()).build();
     }
 

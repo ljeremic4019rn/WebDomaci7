@@ -55,11 +55,11 @@ public class MySQLPostRepository extends MySqlAbstractRepository implements Post
         ResultSet resultSet = null;
         try {
             connection = this.newConnection();
-            System.out.println("KURACCCC");
             statement = connection.createStatement();
             resultSet = statement.executeQuery("select * from posts");
             while (resultSet.next()) {
-                posts.add(new Post(resultSet.getInt("id"), resultSet.getString("title"), resultSet.getString("content"), resultSet.getString("name"), resultSet.getString("date")));
+                posts.add(new Post(resultSet.getInt("id"),resultSet.getString("name"), resultSet.getString("title"),
+                        resultSet.getString("content"), resultSet.getString("date")));
             }
 
         } catch (Exception e) {
