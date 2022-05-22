@@ -21,7 +21,7 @@ public class MySQLCommentRepository extends MySqlAbstractRepository implements C
 
             String[] generatedColumns = {"id"};
 
-            preparedStatement = connection.prepareStatement("INSERT INTO subjects (postId, name, text) VALUES(?, ?, ?)", generatedColumns);
+            preparedStatement = connection.prepareStatement("INSERT INTO comments (postId, name, text) VALUES(?, ?, ?)", generatedColumns);
             preparedStatement.setInt(1, comment.getPostId());
             preparedStatement.setString(2, comment.getName());
             preparedStatement.setString(3, comment.getText());
