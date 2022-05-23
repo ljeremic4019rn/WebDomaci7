@@ -33,16 +33,13 @@
                 <label for="post-content">Content</label>
                 <textarea class="form-control" id="post-content"></textarea>
 
-                <label for="post-date">Date</label>
-                <input type="date" class="form-control" id="post-date" placeholder="Enter post date">
-
             </div>
             <button type="submit" class="btn-sm btn-primary">Submit</button>
         </form>
     </div>
 
 
-    <div id="single-post">
+    <div id="single-post" style="display: none">
         <h1 id="sPost-name"></h1>
         <h2 id="sPost-title"></h2>
         <h6 id="sPost-date"></h6>
@@ -85,8 +82,9 @@
     })
 
     document.getElementById("new-post-btn").addEventListener("click", () => {
-        document.getElementById("posts").style.display = "none";
         document.getElementById("new-post-btn").style.display = "none";
+        document.getElementById("single-post").style.display = "none";
+        document.getElementById("posts").style.display = "none";
         document.getElementById("new-post").style.display = "block";
     }, false);
 
@@ -127,12 +125,17 @@
         const postNameElement = document.getElementById('post-name');
         const postTitleElement = document.getElementById('post-title');
         const postContentElement = document.getElementById('post-content');
-        const postDateElement = document.getElementById('post-date');
 
         const name = postNameElement.value;
         const title = postTitleElement.value;
         const content = postContentElement.value;
-        const date = postDateElement.value.toString();
+        let date = new Date(Date.now()).toLocaleString().split(',')[0];
+
+        if (name === "" || title === "" || content === ""){
+            alert("You have to fill in all fields");
+            return;
+        }
+
 
         fetch('/api/posts', {
             method: 'POST',
@@ -152,7 +155,6 @@
             postNameElement.value = '';
             postTitleElement.value = '';
             postContentElement.value = '';
-            postDateElement.value = '';
 
             makePostsVisible();
         })
@@ -177,6 +179,11 @@
         commentName.value = '';
         commentText.value = '';
 
+
+        if ((name === "" || text === "") || (name === null || text === null)){
+            alert("You have to fill in all fields");
+            return;
+        }
 
         fetch('/api/comments', {
             method: 'POST',
