@@ -21,10 +21,10 @@ public class MySQLPostRepository extends MySqlAbstractRepository implements Post
 
             String[] generatedColumns = {"id"};
 
-            preparedStatement = connection.prepareStatement("INSERT INTO posts (title, content, name, date) VALUES(?, ?, ?, ?)", generatedColumns);
-            preparedStatement.setString(1, post.getTitle());
-            preparedStatement.setString(2, post.getContent());
-            preparedStatement.setString(3, post.getName());
+            preparedStatement = connection.prepareStatement("INSERT INTO posts (name, title, content,  date) VALUES(?, ?, ?, ?)", generatedColumns);
+            preparedStatement.setString(1, post.getName());
+            preparedStatement.setString(2, post.getTitle());
+            preparedStatement.setString(3, post.getContent());
             preparedStatement.setString(4, post.getDate());
             preparedStatement.executeUpdate();
             resultSet = preparedStatement.getGeneratedKeys();
@@ -89,9 +89,9 @@ public class MySQLPostRepository extends MySqlAbstractRepository implements Post
 
             if(resultSet.next()) {
                 int postId = resultSet.getInt("id");
+                String name = resultSet.getString("name");
                 String title = resultSet.getString("title");
                 String content = resultSet.getString("content");
-                String name = resultSet.getString("name");
                 String date = resultSet.getString("date");
                 post = new Post(postId, name, title, content, date);
             }
