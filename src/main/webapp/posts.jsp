@@ -24,17 +24,17 @@
     <div id="new-post" style="display: none">
         <form method="POST" id="post-form">
             <div class="form-group">
-                <label for="post-namee">Name</label>
-                <input type="text" class="form-control" id="post-namee" placeholder="Enter post name">
+                <label for="post-name">Name</label>
+                <input type="text" class="form-control" id="post-name" placeholder="Enter post name">
 
-                <label for="post-titlee">Title</label>
-                <input type="text" class="form-control" id="post-titlee" placeholder="Enter post title">
+                <label for="post-title">Title</label>
+                <input type="text" class="form-control" id="post-title" placeholder="Enter post title">
 
                 <label for="post-content">Content</label>
                 <textarea class="form-control" id="post-content"></textarea>
 
-                <label for="post-datee">Date</label>
-                <input type="date" class="form-control" id="post-datee" placeholder="Enter post date">
+                <label for="post-date">Date</label>
+                <input type="date" class="form-control" id="post-date" placeholder="Enter post date">
 
             </div>
             <button type="submit" class="btn-sm btn-primary">Submit</button>
@@ -58,10 +58,10 @@
 
         <form method="POST" id="comment-form">
             <div class="form-group">
-                <label for="comment-name">Name</label>
-                <input type="text" class="form-control" id="comment-name" placeholder="Enter user name">
+                <label for="comment-name">Username</label>
+                <input type="text" class="form-control" id="comment-name" placeholder="Enter username">
 
-                <label for="comment-text">Content</label>
+                <label for="comment-text">Comment text</label>
                 <textarea class="form-control" id="comment-text" placeholder="Comment text"> </textarea>
             </div>
             <button type="submit" class="btn-sm btn-primary">Submit</button>
@@ -71,6 +71,9 @@
 
 
 <script>
+    let singlePostId = null;
+
+
     fetch('/api/posts', {
         method: 'GET'
     }).then(response => {
@@ -121,10 +124,10 @@
 
     document.getElementById("post-form").addEventListener('submit', function (e) {
         e.preventDefault();
-        const postNameElement = document.getElementById('post-namee');
-        const postTitleElement = document.getElementById('post-titlee');
+        const postNameElement = document.getElementById('post-name');
+        const postTitleElement = document.getElementById('post-title');
         const postContentElement = document.getElementById('post-content');
-        const postDateElement = document.getElementById('post-datee');
+        const postDateElement = document.getElementById('post-date');
 
         const name = postNameElement.value;
         const title = postTitleElement.value;
@@ -162,9 +165,36 @@
         document.getElementById("new-post").style.display = "none";
     }
 
-    function postComment(name, text) {
+    document.getElementById("comment-form").addEventListener('submit', function (e) {
+        e.preventDefault();
 
-    }
+        const commentName = document.getElementById('comment-name');
+        const commentText = document.getElementById('comment-text');
+
+        const name = commentName.value;
+        const text = commentText.value;
+
+        commentName.value = '';
+        commentText.value = '';
+
+
+        fetch('/api/comments', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+                postId: singlePostId,
+                name: name,
+                text: text
+            })
+        })
+            .then(response => {
+            return response.json();
+        }).then(comment => {
+            addComment(comment)
+        })
+    })
 
     function getSinglePost(id) {
         fetch('/api/posts/' + id, {
@@ -178,6 +208,7 @@
             document.getElementById("sPost-content").textContent = post.content;
             document.getElementById("sPost-date").textContent = post.date;
 
+            singlePostId = id;
             getCommentsForPost(id)
         })
     }
@@ -190,30 +221,26 @@
         }).then(comments => {
 
             for (const comment of comments) {
-
                 if (comment.postId === postId) {
-                    console.log(comment)
-                    console.log(comment.title)
-
-                    const div = document.createElement('div');
-                    div.classList.add('container');
-                    const commentTitle = document.createElement('h5');
-                    commentTitle.textContent = comment.name;
-                    const commentContent = document.createElement('small');
-                    commentContent.textContent = comment.text;
-
-                    const br = document.createElement('hr');
-
-                    div.appendChild(commentTitle);
-                    div.appendChild(commentContent);
-                    div.appendChild(br);
-
-
-                    document.getElementById("sPost-comments").appendChild(div);
+                    addComment(comment)
                 }
-
             }
         })
+    }
+
+    function addComment(comment) {
+        const div = document.createElement('div');
+        div.classList.add('container');
+        const commentTitle = document.createElement('h5');
+        commentTitle.textContent = comment.name;
+        const commentContent = document.createElement('small');
+        commentContent.textContent = comment.text;
+        const br = document.createElement('hr');
+
+        div.appendChild(commentTitle);
+        div.appendChild(commentContent);
+        div.appendChild(br);
+        document.getElementById("sPost-comments").appendChild(div);
     }
 </script>
 </body>
