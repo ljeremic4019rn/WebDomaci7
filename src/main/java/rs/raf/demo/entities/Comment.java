@@ -1,11 +1,18 @@
 package rs.raf.demo.entities;
 
+import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.NotNull;
+
 public class Comment {
 
     private int id;
     private int postId;
+    @NotNull(message = "Title field is required")
+    @NotEmpty(message = "Title field is required")
     private String name;
-    private String text;
+    @NotNull(message = "Title field is required")
+    @NotEmpty(message = "Title field is required")
+    private String text;;
 
     public Comment(int id, int postId, String name, String text) {
         this.id = id;
