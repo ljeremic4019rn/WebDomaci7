@@ -68,10 +68,10 @@
 
 
 <script>
-    let singlePostId = null;
+    let singlePostId = null;//holder za id trenutno kliknutok posta
 
 
-    fetch('/api/posts', {
+    fetch('/api/posts', {//fetchovanje svih postova
         method: 'GET'
     }).then(response => {
         return response.json();
@@ -81,7 +81,7 @@
         }
     })
 
-    document.getElementById("new-post-btn").addEventListener("click", () => {
+    document.getElementById("new-post-btn").addEventListener("click", () => {//kada se klikne new post menja se ekran
         document.getElementById("new-post-btn").style.display = "none";
         document.getElementById("single-post").style.display = "none";
         document.getElementById("posts").style.display = "none";
@@ -89,7 +89,7 @@
     }, false);
 
     function addPostElements(post) {
-        const subjectLinks = document.getElementById('posts');
+        const subjectLinks = document.getElementById('posts');//dodavanje posta u listu postova
 
         const linkWrapperDiv = document.createElement('div');
         linkWrapperDiv.classList.add('container', 'border');
@@ -120,7 +120,7 @@
         subjectLinks.appendChild(linkWrapperDiv);
     }
 
-    document.getElementById("post-form").addEventListener('submit', function (e) {
+    document.getElementById("post-form").addEventListener('submit', function (e) {//dodavanje novog posta na bazu
         e.preventDefault();
         const postNameElement = document.getElementById('post-name');
         const postTitleElement = document.getElementById('post-title');
@@ -162,12 +162,12 @@
     })
 
     function makePostsVisible() {
-        document.getElementById("posts").style.display = "block";
+        document.getElementById("posts").style.display = "block";//vracanje postova na home screen
         document.getElementById("new-post-btn").style.display = "none";
         document.getElementById("new-post").style.display = "none";
     }
 
-    document.getElementById("comment-form").addEventListener('submit', function (e) {
+    document.getElementById("comment-form").addEventListener('submit', function (e) {//dodavanje novog posta na bazu
         e.preventDefault();
 
         const commentName = document.getElementById('comment-name');
@@ -203,7 +203,7 @@
         })
     })
 
-    function getSinglePost(id) {
+    function getSinglePost(id) {//uzimanje jednog posta iz baze
         fetch('/api/posts/' + id, {
             method: 'GET'
         }).then(response => {
@@ -220,7 +220,7 @@
         })
     }
 
-    function getCommentsForPost(postId) {
+    function getCommentsForPost(postId) {//uzimanje komentara iz baze i filtriranje za selektovani post
         fetch('/api/comments/', {
             method: 'GET'
         }).then(response => {
@@ -236,7 +236,7 @@
     }
 
     function addComment(comment) {
-        const div = document.createElement('div');
+        const div = document.createElement('div');//dodavanje komentara u listu
         div.classList.add('container');
         const commentTitle = document.createElement('h5');
         commentTitle.textContent = comment.name;
